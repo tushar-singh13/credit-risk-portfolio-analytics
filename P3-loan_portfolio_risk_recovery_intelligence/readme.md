@@ -1,169 +1,174 @@
 # Loan Portfolio Risk & Recovery Intelligence  
-**From Default Metrics to Credit Policy Decisions**
+### From Default Metrics to Credit Policy Decisions (Python + Power BI)
+
+This project analyzes a 600K+ loan consumer portfolio to uncover:
+
+- Structural risk multipliers  
+- Economic loss concentration  
+- Pricing inflection failure  
+- Explicit credit policy interventions  
+
+This is not a machine learning project.
+
+It is a **portfolio decision intelligence framework** designed to answer:
+
+> If this were a ₹500–₹1000 Cr portfolio, what credit rule would I change tomorrow?
 
 ---
 
-## Overview
+# Executive Dashboard (Power BI View)
 
-This project analyzes a large-scale consumer loan portfolio (Lending Club–style data) to move beyond surface-level default rates and uncover **true economic risk**, **loss drivers**, and **actionable credit policy rules**.
+## Portfolio Overview
 
-The goal is not to build a machine learning model, but to answer the kind of questions a **Credit Head, Risk VP, or Strategy Leader** actually cares about:
+![Portfolio Overview](images/portfolio_overview.jpeg)
 
-> *Where does the portfolio really lose money, why does it happen, and what should we do about it?*
-
-The analysis is structured as a **decision-driven narrative**, not a technical notebook.
-
----
-
-## Key Objectives
-
-- Understand **portfolio health** and outcome distribution  
-- Identify **structural risk drivers** (tenor, pricing, borrower attributes)  
-- Measure **economic loss**, not just defaults  
-- Test **risk concentration vs diversification** (Pareto logic)  
-- Convert insights into **explicit credit policy rules**
+Key Metrics:
+- ~500K loans
+- 15.8% default rate
+- $455.6M total net loss
+- 7.9% average recovery rate
 
 ---
 
-## Dataset
+## Risk Segmentation Deep Dive
 
-- Source: Lending Club loan-level data  
-- Size: ~600k+ loans (hundreds of MB)  
-- Key fields:
-  - Loan status, term, grade, interest rate
-  - Loan amount, total payments, recoveries
-  - Borrower attributes (DTI, income, employment length, home ownership)
-  - Loan purpose
+![Risk Segmentation](images/risk_segmentation.jpeg)
 
-> **Important Note:**  
-> Analysis is primarily performed on **closed loans** (Fully Paid, Charged Off, Default) to avoid survival bias from still-active loans.
+Highlights:
+- High-risk cluster default rate: 38%
+- Medium-risk (2 triggers): 29%
+- High-risk cluster represents only 0.7% of portfolio → high severity but limited scale
+- 60-month loans show materially higher default rates
 
----
-
-## Project Structure & Questions Answered
-
-### **SECTION 1 — Portfolio Health & Outcome Reality**
-
-**Q1. What is the overall loan outcome distribution?**  
-Establishes baseline portfolio health.
-
-**Q2. How does loan performance vary by loan term (36 vs 60 months)?**  
-Shows that longer tenors materially amplify risk and loss.
-
-**Q3. What is the average interest rate by loan outcome?**  
-Tests whether pricing differentiates between successful and failed loans.
+This indicates structural leverage risk rather than random portfolio noise.
 
 ---
 
-### **SECTION 2 — Pricing, Risk & Economic Loss**
-
-**Q4. Does higher interest rate actually reduce losses?**  
-Identifies a critical **pricing inflection point (~16–18%)** beyond which higher rates no longer compensate for risk.
-
-**Q5. Are some credit grades underpriced for their risk?**  
-Evaluates alignment between grade, default rate, pricing, and loss severity.
-
-**Q6. Where does the portfolio actually lose money?**  
-Shifts focus from defaults to **net economic loss**, incorporating:
-- Charge-offs  
-- Recoveries  
-- Interest earned  
-
-This section reveals **true loss concentration by grade, term, and purpose**.
+# Analytical Evidence (Python Deep Dive)
 
 ---
 
-### **SECTION 3 — Default & Loss Drivers**
+## 1️⃣ Default & Loss Severity by Loan Term
 
-**Q7. Which borrower attributes drive default the most?**  
-Tests underwriting variables:
-- DTI  
-- Income  
-- Employment length  
-- Home ownership  
+### Default Rate by Term
 
-Separates **signal vs noise** in borrower risk indicators.
+![Default Rate by Term](images/default_rate_by_term.png)
 
-**Q8. Does loan purpose matter for risk and loss?**  
-Identifies purposes that are structurally loss-heavy vs volume-driven.
+60-month loans default materially more than 36-month loans.
 
 ---
 
-### **SECTION 4 — Portfolio-Level Risk Strategy**
+### Average Loss per Default by Term
 
-**Q9. Is risk concentrated or diversified? (Pareto Test)**  
-Applies the 80/20 framework:
-- Top 20% of loss-making loans drive ~48% of total losses  
-- Concentration analyzed by grade, purpose, and tenor  
+![Avg Loss per Default](images/avg_loss_per_default.png)
 
-Used to decide between **surgical fixes vs system-wide tightening**.
+Loss severity is significantly higher for 60-month loans.
 
-**Q10. What loans should never be approved under current pricing?**  
-Defines explicit **“bad loan” combinations** based on observed outcomes.
-
-**Q11. What pricing rules should be enforced going forward?**  
-Translates findings into:
-- Minimum pricing floors  
-- DTI caps by term  
-- Purpose-based restrictions  
-
-**Q12. Final Portfolio Risk Playbook (VP Slide)**  
-One-page strategic summary:
-- What to tighten  
-- What to allow  
-- What to price higher  
-- What to stop completely  
+**Conclusion:**  
+Tenor is a structural risk amplifier — not merely a pricing decision.
 
 ---
 
-## Core Insights (Executive-Level)
+## 2️⃣ Pricing Inflection: Risk vs Reward
 
-- **60-month loans are a structural risk multiplier**, not just a pricing issue  
-- **Pricing breaks beyond ~16–18% interest**, indicating adverse selection  
-- **Debt consolidation and credit card refinancing** drive the largest absolute losses  
-- **High DTI (>40%) loans exhibit tail-risk behavior** despite low frequency  
-- Losses are **partially concentrated**, enabling targeted policy intervention rather than blanket tightening  
+### Interest Rate Inflection Curve
+
+![Interest Rate Inflection](images/interest_rate_inflection.png)
+
+Observation:
+- Default rate rises steadily with interest rate
+- Beyond ~16–18%, net loss turns positive
+- Pricing no longer compensates for risk
+
+This indicates adverse selection in high-rate buckets.
 
 ---
 
-## Tools & Techniques
+### Risk vs Pricing by Credit Grade
+
+![Risk vs Pricing by Grade](images/risk_vs_pricing_by_grade.png)
+
+Lower grades (D–G):
+- Exhibit sharply rising default rates
+- Pricing increase is insufficient to offset loss escalation
+
+Some grades are structurally mispriced.
+
+---
+
+## 3️⃣ Loss Concentration (Pareto Logic)
+
+![Loss Concentration](images/loss_concentration_pareto.png)
+
+Top 20% of loss-driving loans contribute ~48% of total net loss.
+
+Loss is partially concentrated — allowing targeted intervention rather than blanket tightening.
+
+---
+
+# Structural Risk Drivers Identified
+
+- 60-month tenor amplifies both frequency and severity of loss
+- Pricing beyond ~16–18% fails economically
+- Grades D–G generate disproportionate loss contribution
+- High DTI (>40%) loans exhibit tail-risk behavior
+- Debt consolidation & credit card purposes drive high absolute losses
+
+---
+
+# Credit Policy Playbook
+
+| Category | Policy Action | Rationale |
+|----------|--------------|-----------|
+| STOP / Restrict | 60-month loans in high DTI / weak affordability bands | 60M loans show higher default & higher loss severity |
+| STOP / Restrict | Pricing beyond 16–18% without strong recovery economics | Loss flips positive in high-rate buckets |
+| START | Pricing floors by grade & term (C–E focus) | Lower grades require stronger loss coverage |
+| START | Tenor-based underwriting caps (DTI tightening for 60M) | Tenor amplifies concentration risk |
+| CONTINUE | Grade A–B, especially 36M loans | Stable core, lower loss intensity |
+
+---
+
+# Strategic Conclusion
+
+This portfolio does not suffer from random defaults.
+
+It suffers from:
+
+- Tenor leverage risk  
+- Pricing inflection failure  
+- Concentrated loss drivers in specific borrower segments  
+
+Risk is partially concentrated.
+
+This enables surgical tightening — not broad credit contraction.
+
+---
+
+# Tools Used
 
 - Python (pandas, numpy)
-- Groupby aggregations & loss decomposition
-- Binning and segmentation analysis
-- Pareto (concentration) logic
-- Business-first visualization and narrative framing
+- Segmentation & binning logic
+- Loss decomposition
+- Pareto concentration analysis
+- Power BI (Executive dashboard layer)
 
-> No machine learning was used intentionally — this project focuses on **decision intelligence**, not prediction.
+No machine learning was used intentionally.
 
----
-
-## Intended Audience
-
-- Credit Risk Managers  
-- Portfolio Strategy Teams  
-- FinTech / NBFC Leadership  
-- Senior Analytics & Decision Science Roles  
-
-This project is designed to demonstrate **credit judgment, strategic thinking, and policy design**, not just coding ability.
+Focus: Decision intelligence, not prediction accuracy.
 
 ---
 
-## How to Use This Project
+# Intended Audience
 
-- Read top-down (Executive Summary → Policy Playbook)  
-- Treat each question as a **business decision**, not a technical exercise  
-- Use insights as a template for real-world portfolio reviews  
-
----
-
-## Author’s Note
-
-This project reflects a **banker-to-analytics transition**: combining on-ground credit intuition with data-driven validation.
-
-The emphasis is on answering:
-> *“If this were a ₹100–₹1,000 Cr portfolio, what would I change tomorrow?”*
+- Credit Risk Leaders
+- Portfolio Strategy Teams
+- FinTech / NBFC Risk Units
+- Senior Analytics Roles
 
 ---
 
-**End of README**
+# Core Question Answered
+
+If this were a live lending book:
+
+What should be tightened, repriced, scaled, or stopped tomorrow?
