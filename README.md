@@ -1,27 +1,46 @@
-# Tushar Singh – Credit Risk & Portfolio Analytics
+# Tushar Singh  
+### Credit Risk & Portfolio Strategy | Python • SQL • Power BI
 
-Scale-III Branch Manager at State Bank of India with 7+ years of progressive experience in credit operations, SME/Agri portfolio growth, and branch-level risk management.
+Scale-III Branch Manager at State Bank of India with 7+ years of experience in credit operations, SME/Agri portfolio growth, and branch-level risk management.
 
-This portfolio showcases how traditional banking domain expertise can be combined with Python, SQL, and Power BI to build data-driven credit intelligence systems.
+This portfolio demonstrates how deep banking domain expertise can be combined with analytics to build structured, decision-oriented credit intelligence systems.
+
+Focus: Translating data into underwriting, pricing, and portfolio strategy decisions.
 
 ---
 
-## 🔍 Core Focus Areas
+# 🔎 What This Portfolio Represents
+
+This is not a collection of random notebooks.
+
+Each project answers a strategic credit question:
+
+- Where is loss structurally concentrated?
+- When does pricing stop compensating for risk?
+- Which borrower segments should be scaled, repriced, or restricted?
+- How should portfolio governance evolve with data evidence?
+
+---
+
+# 🧠 Core Competencies
 
 - Credit Risk Analytics
-- Portfolio Segmentation & Loss Decomposition
-- Pricing & Profit Leakage Analysis
+- Portfolio Segmentation & Loss Concentration (Pareto)
+- Pricing & Profit Leakage Diagnostics
 - Risk-Based Lending Strategy
-- Business Intelligence for Financial Services
+- Policy Translation from Analytical Evidence
+- Executive Risk Dashboards (Power BI)
 
 ---
 
-## 🛠 Tech Stack
+# 🛠 Technical Stack
 
 - Python (pandas, numpy, matplotlib, seaborn)
 - SQL
 - Power BI
 - Excel
+
+Focus is on analytical clarity and decision frameworks — not black-box ML.
 
 ---
 
@@ -31,52 +50,61 @@ This portfolio showcases how traditional banking domain expertise can be combine
 
 ## 1️⃣ Customer Risk & Revenue Intelligence (SQL + Python)
 
-Analyzed customer-level transaction and revenue behavior to identify high-risk and high-value segments.
+Customer-level behavioral analytics to identify high-value and high-risk segments.
 
-**Key Highlights:**
-- Built customer segmentation logic using SQL
-- Identified revenue concentration and churn patterns
+**Highlights:**
+- Built segmentation logic using SQL
+- Revenue concentration & churn exposure analysis
 - Designed risk-adjusted customer prioritization framework
+- Structured revenue governance insights
 
-📁 Folder: `Project-1-Customer-Risk/`
+📁 `Project-1-Customer-Risk/`
 
 ---
 
 ## 2️⃣ Pricing Discount & Profit Leakage Analysis (Python)
 
-Identified structural discount inefficiencies affecting profitability.
+Diagnostic analysis of discount structures impacting profitability.
 
-**Key Highlights:**
-- Built discount band analysis model
-- Identified margin erosion zones
-- Proposed pricing governance cap framework
+**Highlights:**
+- Discount bucket margin analysis
+- Identified structural erosion zones
+- Built governance-based pricing cap logic
+- Demonstrated how discounting shifts profit concentration
 
-📁 Folder: `Project-2-Pricing-Leakage/`
+📁 `Project-2-Pricing-Leakage/`
 
 ---
 
 ## 3️⃣ Loan Portfolio Risk & Recovery Intelligence (Python + Power BI)
 
-Large-scale credit risk analysis using 500,000+ loan records.
+Large-scale credit portfolio analysis using 500,000+ loan records.
 
-**Key Insights:**
+**Strategic Findings:**
 - Identified 16–18% interest rate inflection point (adverse selection threshold)
-- Discovered 60-month tenor risk multiplier
+- Discovered 60-month tenor as structural risk amplifier
 - Performed DTI-based loss decomposition
-- Built Risk Segment Classification model
-- Developed interactive Power BI dashboard for portfolio monitoring
+- Built multi-factor risk segmentation model
+- Conducted Pareto-based loss concentration analysis
+- Designed executive Power BI dashboard for portfolio monitoring
 
-📁 Folder: `Project-3-Loan-Risk-Intelligence/`
+Outcome: Clear STOP / START / CONTINUE policy recommendations derived from data.
 
----
-
-## 🎯 Objective
-
-Transitioning into Senior Risk Analytics, Credit Strategy, and Portfolio Intelligence roles where domain experience meets data-driven decision making.
+📁 `Project-3-Loan-Risk-Intelligence/`
 
 ---
 
-## 📫 Connect
+# 🎯 Career Objective
 
-LinkedIn: www.linkedin.com/in/tushar-singh1331
+Transitioning into Senior Risk Analytics, Credit Strategy, and Portfolio Intelligence roles where:
+
+- Domain experience meets structured analytics
+- Credit policy is informed by quantitative evidence
+- Risk decisions are built on portfolio-level logic
+
+---
+
+# 📫 Connect
+
+LinkedIn: www.linkedin.com/in/tushar-singh1331  
 Email: tusharbhaal13@gmail.com
