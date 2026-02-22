@@ -78,5 +78,5 @@ Transitioning into Senior Risk Analytics, Credit Strategy, and Portfolio Intelli
 
 ## 📫 Connect
 
-LinkedIn: (Add your link once ready)
+LinkedIn: www.linkedin.com/in/tushar-singh1331
 Email: tusharbhaal13@gmail.com
