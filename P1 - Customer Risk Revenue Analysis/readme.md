@@ -1,7 +1,8 @@
-# Customer Risk & Revenue Intelligence  
+# Customer Risk & Revenue Intelligence
 ### Credit-Inspired Customer Profitability & Risk Segmentation (SQL + Python)
 
-This project applies portfolio-risk thinking from banking to customer-level revenue concentration and return-driven margin erosion.
+This project applies portfolio-risk thinking from banking to customer-level revenue
+concentration and return-driven margin erosion.
 
 Instead of simply identifying top customers, this analysis answers:
 
@@ -14,29 +15,17 @@ The output is a decision-ready customer risk governance model.
 
 ---
 
-## Business Problem
+## Dataset
 
-In high-volume transactional businesses, profitability erosion often hides behind:
-- Revenue concentration risk
-- Return-heavy customer behavior
-- Structurally low-margin segments
-- Uncontrolled discounting
-
-Traditional reporting shows totals.  
-This project builds a risk-layered framework to identify intervention targets.
-
----
-
-## Dataset Overview
-
-Superstore transactional dataset:
-
+**Source:** Superstore transactional dataset (SQLite)
 - `orders` — Line-item sales (sales, profit, subcategory, segment, region)
 - `returns` — Order-level return flags
 - `managers` — Region mapping
 
-Data modeled at:
-Line Item → Order → Customer → Segment → Region
+Data modelled at: Line Item → Order → Customer → Segment → Region
+
+> Note: Originally built in Google Colab. To run locally, replace the `drive.mount()`
+> cell with your local file path. Superstore dataset available via Tableau Public or Kaggle.
 
 ---
 
@@ -50,110 +39,105 @@ Line Item → Order → Customer → Segment → Region
 
 ---
 
-# Key Analytical Insights
+## Key Analytical Insights
 
 ---
 
-## 1️⃣ Revenue Concentration Risk
+### 1️⃣ Revenue Concentration Risk
 
 Top customers drive disproportionate revenue exposure.
 
 ![Revenue Concentration](images/revenue_concentration.png)
 
-Implication:
+Top 20 customers contribute ~11.5% of total sales.
 Revenue dependency risk exists — concentration monitoring required.
 
 ---
 
-## 2️⃣ Subcategory Profit & Loss Distribution
+### 2️⃣ Subcategory Profit & Loss Distribution
 
-Certain product lines structurally erode profitability.
+Certain product lines structurally erode profitability regardless of revenue contribution.
 
 ![Subcategory Profit](images/subcategory_profit_loss.png)
 
-Key Observation:
-- Tables category shows heavy structural losses.
-- Copiers & Phones drive outsized profitability.
+- Tables: single largest loss driver (~₹17,000+ in losses)
+- Copiers & Phones: drive outsized profitability
+- Loss is subcategory-structural, not customer-driven
 
-Implication:
-Product-level pricing governance required.
-
----
-
-## 3️⃣ Returns vs Non-Returns Margin Impact
-
-Return-heavy behavior impacts structural margins.
-
-![Profit Margin Comparison](images/returned_vs_nonreturned_margin.png)
-
-Insight:
-Returned orders exhibit margin instability — profitability protection requires return governance, not just repricing.
+Product-level pricing governance required before customer-level intervention.
 
 ---
 
-## 4️⃣ Return Rate Risk Customers (≥ 5 Orders)
+### 3️⃣ Return Rate Risk Customers (≥ 5 Orders)
 
-High-frequency return customers represent margin erosion clusters.
+High-frequency return customers represent concentrated margin erosion clusters.
 
 ![Top Return Customers](images/top_return_customers.png)
 
-These accounts require targeted intervention.
+Top return-rate customers exceed 40–60% return frequency.
+These accounts require targeted intervention — not broad policy changes.
 
 ---
 
-## 5️⃣ Segment-Level Return Behavior
+### 4️⃣ Segment-Level Return Behaviour
 
-Return behavior varies significantly by customer segment.
+Return behaviour varies significantly by customer segment.
 
 ![Segment Return Rate](images/segment_return_rate.png)
 
 At-Risk and Growth segments show elevated return rates relative to Core accounts.
+Core segment shows near-zero return rate — the benchmark for healthy account behaviour.
 
 ---
 
-# Customer Risk Segmentation Framework
+### 5️⃣ Returned vs Non-Returned Order Margins
 
-Customers classified into:
+![Profit Margin Comparison](images/returned_vs_nonreturned_margin.png)
 
-- **Core** — High margin, low return behavior
-- **Growth** — Revenue expanding but margin volatile
-- **Neutral** — Stable, moderate risk
-- **At-Risk** — Elevated return frequency
-- **Loss-Making** — Negative profitability despite revenue
-
-This segmentation enables structured intervention.
+Aggregate margin difference between returned and non-returned orders is small.
+This confirms that margin risk from returns is **not visible in aggregate** —
+it is concentrated in specific high-return customers identified above.
+Targeting those accounts will recover more margin than blanket repricing.
 
 ---
 
-# Priority Fix Targets (Intervention Table)
+## Customer Risk Segmentation Framework
 
-| Customer | Segment | Risk Driver | Suggested Action |
-|-----------|----------|------------|------------------|
-| High revenue + high returns | Consumer | Returns | Restrict return eligibility |
-| Persistent loss customers | Corporate | Margin erosion | Renegotiate terms / exit |
-| Thin margin + return stress | Corporate | Returns | Pre-approval return control |
+Customers classified into five tiers using percentile-based thresholds:
+
+| Segment | Profile |
+|---|---|
+| Core | High margin, low return rate — retain and protect |
+| Growth | Revenue expanding but margin volatile — monitor closely |
+| Neutral | Stable, moderate risk — standard treatment |
+| At-Risk | Elevated return frequency — tighten return policy |
+| Loss-Making | Negative profitability despite revenue — renegotiate or exit |
+
+---
+
+## Priority Fix Targets
+
+![Priority Fix Targets](images/priority_fix_targets.png)
 
 80% of identified intervention targets are return-driven rather than pricing-driven.
 
-**Strategic Conclusion:**
-Return-policy governance will deliver faster margin stabilization than blanket repricing.
+**Strategic conclusion:** Return-policy governance will deliver faster margin
+stabilisation than blanket repricing initiatives.
 
 ---
 
-# Business Policy Framework
+## Business Policy Framework
 
 | Customer Type | Action Strategy |
-|---------------|----------------|
-| Core | Retain & incentivize |
+|---|---|
+| Core | Retain & incentivise |
 | Growth (volatile margin) | Reprice / monitor |
-| High-return behavior | Tighten return policy |
-| Loss-making | Exit or restructure |
-
-This converts analysis into executive decision logic.
+| High-return behaviour | Tighten return eligibility |
+| Loss-making | Exit or restructure terms |
 
 ---
 
-# Files in Repository
+## Files in This Folder
 
 - `P1_customer_risk_revenue_intelligence.ipynb`
 - `P1_customer_risk_revenue_intelligence.html`
@@ -162,11 +146,10 @@ This converts analysis into executive decision logic.
 
 ---
 
-# Executive Summary
+## Executive Summary
 
-This project demonstrates how credit-style portfolio analytics can be applied to customer revenue governance.
+This project demonstrates how credit-style portfolio analytics can be applied to
+customer revenue governance. It bridges domain expertise in risk management with
+structured data analytics.
 
-It bridges domain expertise in risk management with structured data analytics.
-
-Focus:
-Revenue Concentration → Return Behavior → Margin Stability → Policy Action
+Focus: Revenue Concentration → Return Behaviour → Margin Stability → Policy Action
