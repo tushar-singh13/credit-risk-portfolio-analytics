@@ -1,9 +1,11 @@
-# Pricing, Discount & Profit Leakage Intelligence  
+# Pricing, Discount & Profit Leakage Intelligence
 ### Structural Margin Erosion Analysis (Python)
 
-This project analyzes transaction-level discounting behavior to identify structural profit leakage, value-destructive pricing patterns, and concentration of margin erosion across segments and subcategories.
+This project analyses transaction-level discounting behaviour to identify structural
+profit leakage, value-destructive pricing patterns, and concentration of margin
+erosion across segments and subcategories.
 
-Instead of asking “What are our discounts?”, this analysis asks:
+Instead of asking "What are our discounts?", this analysis asks:
 
 - At what discount threshold does margin collapse?
 - How much total profit is destroyed by high-discount deals?
@@ -14,166 +16,136 @@ The output is a discount governance framework.
 
 ---
 
-## Business Problem
+## Dataset
 
-Discounting is often used as a revenue growth lever.
+**Source:** Superstore transactional dataset
+- `orders` — Line-item sales, profit, discount, segment, subcategory
 
-However:
-- Excessive discounting can structurally destroy margin.
-- A small number of bad deals can drive disproportionate losses.
-- Not all discounting is equal — some levels are economically viable, others are value-destructive.
+Modelled at transaction level to isolate pricing effects.
 
-This project isolates where discounting shifts from strategic lever to profit leakage engine.
-
----
-
-## Dataset Overview
-
-Superstore transactional dataset:
-
-- `orders` — line-item sales, profit, discount, segment, subcategory
-
-Modeled at transaction-level to isolate pricing effects.
+> Note: Originally built in Google Colab. To run locally, replace the `drive.mount()`
+> cell with your local file path. Superstore dataset available via Tableau Public or Kaggle.
 
 ---
 
 ## Tools & Techniques
 
 - Python (pandas, numpy)
-- Discount bucketization:
-  - 0%
-  - 0–10%
-  - 10–20%
-  - 20–30%
-  - 30%+
+- Discount bucketisation: 0% · 0–10% · 10–20% · 20–30% · 30%+
 - Margin analysis by discount bucket
 - Revenue vs profit exposure comparison
 - Pareto-style loss concentration analysis
 
 ---
 
-# Key Analytical Insights
+## Key Analytical Insights
 
 ---
 
-## 1️⃣ Transaction-Level Discount vs Profit
+### 1️⃣ Transaction-Level Discount vs Profit
 
 ![Discount vs Profit](images/discount_vs_profit.png)
 
-Observation:
 Profit dispersion collapses sharply beyond 20% discount.
-High-discount transactions cluster in negative territory.
+High-discount transactions cluster consistently in negative profit territory.
+The 20% level is the structural break point — not gradual decline.
 
 ---
 
-## 2️⃣ Profit Margin by Discount Bucket
+### 2️⃣ Profit Margin by Discount Bucket
 
 ![Margin by Discount Bucket](images/margin_by_discount_bucket.png)
 
-Critical Finding:
+| Discount Level | Profit Margin |
+|---|---|
+| 0% | ~30% |
+| 0–10% | ~17% |
+| 10–20% | ~12% |
+| 20–30% | Negative |
+| 30%+ | ~–48% |
 
-- 0% discount → ~30% margin
-- 0–10% → healthy margin
-- 10–20% → still viable
-- 20–30% → negative margin
-- 30%+ → structurally destructive
-
-Discounts above **20%** consistently destroy value.
+Discounts above 20% consistently destroy value across all product categories.
 
 ---
 
-## 3️⃣ Revenue vs Profit Exposure in High-Discount Buckets
+### 3️⃣ Revenue vs Profit Exposure in High-Discount Buckets
 
 ![Revenue vs Profit Exposure](images/revenue_vs_profit_high_discount.png)
 
-Key Insight:
+High-discount buckets (20–30% and 30%+) represent a meaningful share of revenue
+but generate deeply negative profit contribution.
 
-High-discount buckets represent a meaningful share of revenue  
-but destroy a disproportionate share of total profit.
-
-This is concentrated leakage.
+This is the core leakage pattern: revenue is recorded, profit is destroyed.
 
 ---
 
-## 4️⃣ Top Loss-Making Subcategories
+### 4️⃣ Top Loss-Making Subcategories
 
 ![Top Loss Subcategories](images/top_loss_subcategories.png)
 
-Tables, Bookcases, and Supplies drive majority of structural losses.
+Three subcategories drive all structural losses:
+- **Tables** — single largest loss driver (~–$17,700)
+- **Bookcases** — second largest (~–$3,400)
+- **Supplies** — third (~–$1,200)
+
+All three carry average discount rates 2–3× the portfolio norm.
 
 ---
 
-## 5️⃣ Segment-Level Impact at High Discounts
+### 5️⃣ Segment-Level Impact at High Discounts
 
 ![Segment High Discount Margin](images/segment_high_discount_margin.png)
 
-All segments show negative margin at >30% discount.
+All three customer segments (Consumer, Corporate, Home Office) show:
+- Negative margin at 20–30% discount (~–10%)
+- Severely negative margin at 30%+ discount (–39% to –52%)
 
-Loss severity highest in Consumer and Corporate segments.
+High-discount destruction is not segment-specific — it is universal.
 
 ---
 
-## 6️⃣ Loss Concentration (Pareto Analysis)
+### 6️⃣ Loss Concentration (Pareto Analysis)
 
 ![Cumulative Loss Share](images/cumulative_loss_share.png)
 
-Nearly 80% of total losses are concentrated in a small subset of subcategories.
+~80% of total losses concentrate in Tables alone.
+All losses (100%) sit within just 3 subcategories.
 
-Profit leakage is not systemic — it is highly concentrated.
-
----
-
-# Structural Conclusion
-
-Discounting above 20% is not a growth lever.
-
-It is a margin destruction mechanism.
-
-Profit erosion is concentrated in:
-- Specific subcategories
-- Specific high-discount buckets
-- A small number of structurally weak pricing patterns
+Profit leakage is not systemic — it is surgically addressable.
 
 ---
 
-# Pricing Governance Framework
+## Structural Conclusion
+
+Discounting above 20% is not a growth lever. It is a margin destruction mechanism.
+
+1,885 transactions identified as "bad deals" (discount ≥20%, profit ≤0) —
+contributing ~$481K revenue but generating net losses invisible at aggregate level.
+
+---
+
+## Pricing Governance Framework
 
 | Discount Level | Policy Recommendation |
-|----------------|----------------------|
+|---|---|
 | 0–10% | Fully allowed |
-| 10–20% | Controlled approval |
+| 10–20% | Standard approval |
 | 20–30% | Exception-based approval only |
-| 30%+ | Prohibited unless strategic clearance |
+| 30%+ | Prohibited unless strategic sign-off |
 
-Subcategory-level pricing review required for:
-- Tables
-- Bookcases
-- Supplies
+**Subcategory caps required for:** Tables · Bookcases · Supplies
 
 ---
 
-# Business Impact Logic
-
-Instead of blanket price increases, implement:
-
-- Discount caps at 20%
-- Deal-level approval workflows
-- Subcategory repricing for structural loss drivers
-- Segment-specific pricing rules
-
-This approach protects margin without sacrificing controlled growth.
-
----
-
-# Files in Repository
+## Files in This Folder
 
 - `P2_pricing_discount_profit_leakage.ipynb`
 - `P2_pricing_discount_profit_leakage.html`
 
 ---
 
-# Executive Summary
+## Executive Summary
 
-This project demonstrates how pricing analytics can move from descriptive reporting to enforceable pricing control design.
-
-It applies structured financial logic to discount governance, isolating the precise point where revenue growth turns into profit leakage.
+This project moves pricing analytics from descriptive reporting to enforceable
+pricing control design. It applies structured financial logic to discount governance,
+isolating the precise point where revenue growth turns into profit leakage.
