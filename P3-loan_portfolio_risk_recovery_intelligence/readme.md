@@ -1,174 +1,151 @@
-# Loan Portfolio Risk & Recovery Intelligence  
-### From Default Metrics to Credit Policy Decisions (Python + Power BI)
+# Pricing, Discount & Profit Leakage Intelligence
+### Structural Margin Erosion Analysis (Python)
 
-This project analyzes a 600K+ loan consumer portfolio to uncover:
+This project analyses transaction-level discounting behaviour to identify structural
+profit leakage, value-destructive pricing patterns, and concentration of margin
+erosion across segments and subcategories.
 
-- Structural risk multipliers  
-- Economic loss concentration  
-- Pricing inflection failure  
-- Explicit credit policy interventions  
+Instead of asking "What are our discounts?", this analysis asks:
 
-This is not a machine learning project.
+- At what discount threshold does margin collapse?
+- How much total profit is destroyed by high-discount deals?
+- Is leakage systemic or concentrated?
+- Which pricing controls would recover margin fastest?
 
-It is a **portfolio decision intelligence framework** designed to answer:
-
-> If this were a ₹500–₹1000 Cr portfolio, what credit rule would I change tomorrow?
-
----
-
-# Executive Dashboard (Power BI View)
-
-## Portfolio Overview
-
-![Portfolio Overview](images/portfolio_overview.jpeg)
-
-Key Metrics:
-- ~500K loans
-- 15.8% default rate
-- $455.6M total net loss
-- 7.9% average recovery rate
+The output is a discount governance framework.
 
 ---
 
-## Risk Segmentation Deep Dive
+## Dataset
 
-![Risk Segmentation](images/risk_segmentation.jpeg)
+**Source:** Superstore transactional dataset
+- `orders` — Line-item sales, profit, discount, segment, subcategory
 
-Highlights:
-- High-risk cluster default rate: 38%
-- Medium-risk (2 triggers): 29%
-- High-risk cluster represents only 0.7% of portfolio → high severity but limited scale
-- 60-month loans show materially higher default rates
+Modelled at transaction level to isolate pricing effects.
 
-This indicates structural leverage risk rather than random portfolio noise.
+> Note: Originally built in Google Colab. To run locally, replace the `drive.mount()`
+> cell with your local file path. Superstore dataset available via Tableau Public or Kaggle.
 
 ---
 
-# Analytical Evidence (Python Deep Dive)
-
----
-
-## 1️⃣ Default & Loss Severity by Loan Term
-
-### Default Rate by Term
-
-![Default Rate by Term](images/default_rate_by_term.png)
-
-60-month loans default materially more than 36-month loans.
-
----
-
-### Average Loss per Default by Term
-
-![Avg Loss per Default](images/avg_loss_per_default.png)
-
-Loss severity is significantly higher for 60-month loans.
-
-**Conclusion:**  
-Tenor is a structural risk amplifier — not merely a pricing decision.
-
----
-
-## 2️⃣ Pricing Inflection: Risk vs Reward
-
-### Interest Rate Inflection Curve
-
-![Interest Rate Inflection](images/interest_rate_inflection.png)
-
-Observation:
-- Default rate rises steadily with interest rate
-- Beyond ~16–18%, net loss turns positive
-- Pricing no longer compensates for risk
-
-This indicates adverse selection in high-rate buckets.
-
----
-
-### Risk vs Pricing by Credit Grade
-
-![Risk vs Pricing by Grade](images/risk_vs_pricing_by_grade.png)
-
-Lower grades (D–G):
-- Exhibit sharply rising default rates
-- Pricing increase is insufficient to offset loss escalation
-
-Some grades are structurally mispriced.
-
----
-
-## 3️⃣ Loss Concentration (Pareto Logic)
-
-![Loss Concentration](images/loss_concentration_pareto.png)
-
-Top 20% of loss-driving loans contribute ~48% of total net loss.
-
-Loss is partially concentrated — allowing targeted intervention rather than blanket tightening.
-
----
-
-# Structural Risk Drivers Identified
-
-- 60-month tenor amplifies both frequency and severity of loss
-- Pricing beyond ~16–18% fails economically
-- Grades D–G generate disproportionate loss contribution
-- High DTI (>40%) loans exhibit tail-risk behavior
-- Debt consolidation & credit card purposes drive high absolute losses
-
----
-
-# Credit Policy Playbook
-
-| Category | Policy Action | Rationale |
-|----------|--------------|-----------|
-| STOP / Restrict | 60-month loans in high DTI / weak affordability bands | 60M loans show higher default & higher loss severity |
-| STOP / Restrict | Pricing beyond 16–18% without strong recovery economics | Loss flips positive in high-rate buckets |
-| START | Pricing floors by grade & term (C–E focus) | Lower grades require stronger loss coverage |
-| START | Tenor-based underwriting caps (DTI tightening for 60M) | Tenor amplifies concentration risk |
-| CONTINUE | Grade A–B, especially 36M loans | Stable core, lower loss intensity |
-
----
-
-# Strategic Conclusion
-
-This portfolio does not suffer from random defaults.
-
-It suffers from:
-
-- Tenor leverage risk  
-- Pricing inflection failure  
-- Concentrated loss drivers in specific borrower segments  
-
-Risk is partially concentrated.
-
-This enables surgical tightening — not broad credit contraction.
-
----
-
-# Tools Used
+## Tools & Techniques
 
 - Python (pandas, numpy)
-- Segmentation & binning logic
-- Loss decomposition
-- Pareto concentration analysis
-- Power BI (Executive dashboard layer)
-
-No machine learning was used intentionally.
-
-Focus: Decision intelligence, not prediction accuracy.
+- Discount bucketisation: 0% · 0–10% · 10–20% · 20–30% · 30%+
+- Margin analysis by discount bucket
+- Revenue vs profit exposure comparison
+- Pareto-style loss concentration analysis
 
 ---
 
-# Intended Audience
-
-- Credit Risk Leaders
-- Portfolio Strategy Teams
-- FinTech / NBFC Risk Units
-- Senior Analytics Roles
+## Key Analytical Insights
 
 ---
 
-# Core Question Answered
+### 1️⃣ Transaction-Level Discount vs Profit
 
-If this were a live lending book:
+![Discount vs Profit](images/discount_vs_profit.png)
 
-What should be tightened, repriced, scaled, or stopped tomorrow?
+Profit dispersion collapses sharply beyond 20% discount.
+High-discount transactions cluster consistently in negative profit territory.
+The 20% level is the structural break point — not gradual decline.
+
+---
+
+### 2️⃣ Profit Margin by Discount Bucket
+
+![Margin by Discount Bucket](images/margin_by_discount_bucket.png)
+
+| Discount Level | Profit Margin |
+|---|---|
+| 0% | ~30% |
+| 0–10% | ~17% |
+| 10–20% | ~12% |
+| 20–30% | Negative |
+| 30%+ | ~–48% |
+
+Discounts above 20% consistently destroy value across all product categories.
+
+---
+
+### 3️⃣ Revenue vs Profit Exposure in High-Discount Buckets
+
+![Revenue vs Profit Exposure](images/revenue_vs_profit_high_discount.png)
+
+High-discount buckets (20–30% and 30%+) represent a meaningful share of revenue
+but generate deeply negative profit contribution.
+
+This is the core leakage pattern: revenue is recorded, profit is destroyed.
+
+---
+
+### 4️⃣ Top Loss-Making Subcategories
+
+![Top Loss Subcategories](images/top_loss_subcategories.png)
+
+Three subcategories drive all structural losses:
+- **Tables** — single largest loss driver (~–$17,700)
+- **Bookcases** — second largest (~–$3,400)
+- **Supplies** — third (~–$1,200)
+
+All three carry average discount rates 2–3× the portfolio norm.
+
+---
+
+### 5️⃣ Segment-Level Impact at High Discounts
+
+![Segment High Discount Margin](images/segment_high_discount_margin.png)
+
+All three customer segments (Consumer, Corporate, Home Office) show:
+- Negative margin at 20–30% discount (~–10%)
+- Severely negative margin at 30%+ discount (–39% to –52%)
+
+High-discount destruction is not segment-specific — it is universal.
+
+---
+
+### 6️⃣ Loss Concentration (Pareto Analysis)
+
+![Cumulative Loss Share](images/cumulative_loss_share.png)
+
+~80% of total losses concentrate in Tables alone.
+All losses (100%) sit within just 3 subcategories.
+
+Profit leakage is not systemic — it is surgically addressable.
+
+---
+
+## Structural Conclusion
+
+Discounting above 20% is not a growth lever. It is a margin destruction mechanism.
+
+1,885 transactions identified as "bad deals" (discount ≥20%, profit ≤0) —
+contributing ~$481K revenue but generating net losses invisible at aggregate level.
+
+---
+
+## Pricing Governance Framework
+
+| Discount Level | Policy Recommendation |
+|---|---|
+| 0–10% | Fully allowed |
+| 10–20% | Standard approval |
+| 20–30% | Exception-based approval only |
+| 30%+ | Prohibited unless strategic sign-off |
+
+**Subcategory caps required for:** Tables · Bookcases · Supplies
+
+---
+
+## Files in This Folder
+
+- `P2_pricing_discount_profit_leakage.ipynb`
+- `P2_pricing_discount_profit_leakage.html`
+
+---
+
+## Executive Summary
+
+This project moves pricing analytics from descriptive reporting to enforceable
+pricing control design. It applies structured financial logic to discount governance,
+isolating the precise point where revenue growth turns into profit leakage.
