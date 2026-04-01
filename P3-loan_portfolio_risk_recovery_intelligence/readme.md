@@ -158,6 +158,8 @@ for defaults. Threshold tuning is essential for credit decisioning.
 on portfolio outcomes than incremental model accuracy improvements. 
 A threshold of 0.2 balances risk control with business growth.
 
+![Expected Loss vs Threshold](images/expected_loss_threshold.png)
+
 ---
 
 ### Model Explainability (SHAP)
@@ -173,6 +175,8 @@ officer would apply:
 
 The model is not a black box — it reflects underwriting logic that can 
 be explained to regulators and credit committees.
+
+![SHAP Summary](images/shap_summary.png)
 
 ---
 
