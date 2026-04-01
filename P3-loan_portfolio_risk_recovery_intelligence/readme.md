@@ -1,38 +1,35 @@
 # Loan Portfolio Risk & Recovery Intelligence
 ### From Default Metrics to Credit Policy Decisions (Python + Power BI)
 
-This project analyses a 500K+ loan consumer portfolio to identify structural risk
-multipliers, economic loss concentration, pricing inflection failure, and explicit
-credit policy interventions.
+This project analyses a 500K+ loan consumer portfolio to identify structural 
+risk multipliers, economic loss concentration, pricing inflection failure, 
+predictive default modelling, and explicit credit policy interventions.
 
-This is not a machine learning project.
+It is a **end-to-end credit risk framework** designed to answer:
 
-It is a **portfolio decision intelligence framework** designed to answer:
-
-> If this were a live ₹500–1000 Cr lending book, what credit rule would I change tomorrow?
+> If this were a live ₹500–1000 Cr lending book, what credit rule would 
+> I change tomorrow — and which borrowers should never have been approved?
 
 ---
 
 ## Dataset
 
-**Source:** Lending Club Accepted Loans (2007–2018)
-**Size:** 500,000 records
+**Source:** Lending Club Accepted Loans (2007–2018)  
+**Size:** 500,000 records  
 **Available at:** [Kaggle — Lending Club Loan Data](https://www.kaggle.com/datasets/wordsforthewise/lending-club)
 
-> Note: Originally built in Google Colab. To run locally, replace the `drive.mount()`
-> cell with your local file path to the dataset CSV.
+> Note: Originally built in Google Colab. To run locally, replace the 
+> `drive.mount()` cell with your local file path to the dataset CSV.
 
 ---
 
 ## Tools Used
 
-- Python (pandas, numpy, matplotlib, seaborn)
+- Python (pandas, numpy, matplotlib, seaborn, scikit-learn, XGBoost, SHAP)
 - Segmentation & binning logic
-- Loss decomposition
-- Pareto concentration analysis
+- Loss decomposition & Pareto concentration analysis
+- Predictive modelling — Logistic Regression + XGBoost
 - Power BI (executive dashboard layer)
-
-No machine learning. Focus: decision intelligence, not prediction accuracy.
 
 ---
 
@@ -42,7 +39,8 @@ No machine learning. Focus: decision intelligence, not prediction accuracy.
 
 ![Portfolio Overview](images/portfolio_overview.jpeg)
 
-**Key metrics:** 500K loans · 15.8% default rate · $455.6M total net loss · 7.9% avg recovery rate
+**Key metrics:** 500K loans · 15.8% default rate · $455.6M total net loss · 
+7.9% avg recovery rate
 
 ---
 
@@ -50,11 +48,11 @@ No machine learning. Focus: decision intelligence, not prediction accuracy.
 
 ![Risk Segmentation](images/risk_segmentation.jpeg)
 
-**High-risk cluster:** 38.1% default rate · only 0.72% of portfolio
+**High-risk cluster:** 38.1% default rate · only 0.72% of portfolio  
 **Medium-risk (2 of 3 triggers):** 29.1% default rate · 8.07% of portfolio
 
-High intensity risk exists but is not scaled — opportunity to tighten underwriting
-before it grows.
+High intensity risk exists but is not scaled — opportunity to tighten 
+underwriting before it grows.
 
 ---
 
@@ -85,9 +83,9 @@ This is a structural underwriting risk, not a pricing question.
 - Crosses zero between **16–18%**
 - Turns clearly positive at **18%+**
 
-Beyond 16–18%, higher interest charged does not compensate for rising default losses.
-This is adverse selection — the borrowers accepting high-rate loans are disproportionately
-those who cannot repay.
+Beyond 16–18%, higher interest charged does not compensate for rising 
+default losses. This is adverse selection — borrowers accepting high-rate 
+loans are disproportionately those who cannot repay.
 
 ---
 
@@ -98,8 +96,8 @@ those who cannot repay.
 Interest rate increases linearly from Grade A to G.
 Default rate accelerates — rising faster than pricing from Grade D onwards.
 
-The gap between the two lines at Grades E–G is where the portfolio loses money.
-Pricing follows a linear rule; risk follows an exponential one.
+The gap between the two lines at Grades E–G is where the portfolio loses 
+money. Pricing follows a linear rule; risk follows an exponential one.
 
 ---
 
@@ -109,8 +107,72 @@ Pricing follows a linear rule; risk follows an exponential one.
 
 Top 20% of loss-making loans drive **~48% of total economic loss**.
 
-Loss is partially concentrated — this enables surgical intervention
-rather than broad credit tightening.
+Loss is partially concentrated — enabling surgical intervention rather 
+than broad credit tightening.
+
+---
+
+## Section 5 — Predictive Credit Scoring Model
+
+### Objective
+
+Historical analysis identifies where losses occurred.
+Predictive modelling answers: **which new applicants are likely to default?**
+
+Two models were built using only underwriting-time variables — 
+deliberately excluding post-outcome data to prevent leakage.
+
+**Features used:** loan amount · term · interest rate · annual income · 
+DTI · FICO score · employment length
+
+---
+
+### Model Performance
+
+| Metric | Logistic Regression | XGBoost |
+|---|---|---|
+| AUC | 0.727 | 0.727 |
+| Gini | 0.454 | 0.454 |
+| KS Statistic | — | 0.335 |
+
+Both models achieved similar performance on this feature set, indicating 
+the underlying relationships are largely linear with core underwriting 
+variables. This is expected — production models with full bureau data 
+typically achieve AUC of 0.80–0.85 and KS of 0.45–0.60.
+
+**Key insight:** At a standard 0.5 threshold both models show low recall 
+for defaults. Threshold tuning is essential for credit decisioning.
+
+---
+
+### Threshold Strategy & Expected Loss
+
+| Threshold | Model | Acceptance Rate | Bad Rate | Expected Loss |
+|---|---|---|---|---|
+| 0.1 | XGBoost | 27.9% | 6.5% | $29.7M |
+| 0.2 | XGBoost | 59.9% | 10.9% | $97.2M |
+| 0.3 | XGBoost | 79.4% | 14.2% | $168M |
+| 0.5 | XGBoost | 96.1% | 18.8% | $269M |
+
+**Key insight:** Decision policy (threshold selection) has greater impact 
+on portfolio outcomes than incremental model accuracy improvements. 
+A threshold of 0.2 balances risk control with business growth.
+
+---
+
+### Model Explainability (SHAP)
+
+SHAP values confirm the model learned the same relationships a credit 
+officer would apply:
+
+- **loan_percent_income** — strongest default driver, consistent with 
+  DTI analysis above
+- **int_rate** — high rates increase default probability, aligns with 
+  16–18% inflection finding
+- **fico_mid** — higher credit scores reduce default probability
+
+The model is not a black box — it reflects underwriting logic that can 
+be explained to regulators and credit committees.
 
 ---
 
@@ -142,10 +204,15 @@ rather than broad credit tightening.
 
 This portfolio does not suffer from random defaults.
 
-It suffers from tenor leverage risk, pricing inflection failure, and concentrated
-loss drivers in specific borrower segments.
+It suffers from tenor leverage risk, pricing inflection failure, and 
+concentrated loss drivers in specific borrower segments.
 
-Risk is partially concentrated — enabling **surgical tightening, not broad credit contraction.**
+Risk is partially concentrated — enabling **surgical tightening, 
+not broad credit contraction.**
+
+The predictive model confirms these findings — SHAP values align with 
+the structural risk drivers identified through portfolio analysis, 
+validating both the analytical and modelling approach.
 
 ---
 
